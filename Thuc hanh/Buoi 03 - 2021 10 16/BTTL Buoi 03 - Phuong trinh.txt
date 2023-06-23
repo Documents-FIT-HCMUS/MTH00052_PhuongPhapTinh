@@ -1,0 +1,63 @@
+2.1)
+clc;
+format long;
+syms x
+f = x + sin(x) - 2;
+a = 1; b = 1.4; k = 0; del_f = 0.001;
+fa = subs(f, x, a); fb = subs(f, x, b);
+
+while (true)
+    c = (a+b)/2; rEc = abs((a-c)/c); fc = subs(f,x,c);
+    if (abs(fc) < del_f)
+        disp(round(c, 6))
+        break;
+    end
+    dau = sign(fa*fc);
+    if (dau > 0) 
+        a = c;
+    end
+    if (dau < 0) 
+        b = c;
+    end
+    k = k + 1;
+end
+
+2.2)
+clc;
+format long;
+syms x
+f = x + sin(x) - 2;
+phi = 2 - sin(x);
+x0 = 1.05; k = 0; del_f = 0.001;
+
+while (true)
+    xn = subs(phi, x, x0);
+    rExn = abs((xn-x0)/x0);
+    fxn = subs(f,x,xn);
+    if (abs(fxn) < del_f)
+        disp(round(xn, 6))
+        break;
+    end
+    x0 = xn;
+    k = k + 1;
+end
+
+2.3) 
+clc;
+format long;
+syms x
+f = x^2 + x - 5;
+phi = sqrt(5-x);
+x0 = 1.5; k = 0; del_f = 0.001;
+
+while (k < 6)
+    xn = subs(phi, x, x0);
+    rExn = abs((xn-x0)/x0);
+    fxn = subs(f,x,xn);
+    if (abs(fxn) < del_f)
+        disp(round(xn, 6))
+        break;
+    end
+    x0 = xn;
+    k = k + 1;
+end

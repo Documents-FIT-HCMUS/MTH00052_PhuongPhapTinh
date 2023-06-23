@@ -1,0 +1,115 @@
+Bai tap 1: 
+p_e = 0.9857; p_a = 0.9768;
+p_e = 421; p_a = 397;
+p_e = 1102; p_a = 1113;
+p_e = 2.5743; p_a = 2.6381;
+
+aEp = abs(p_e-p_a)
+rEp = abs((p_e-p_a)/p_e)
+
+Bai tap 2:
+format long;
+p_e = 0.9857564312; p_a = 0.9768463123;
+p_e = 42189376; p_a = 39773891;
+p_e = 1102.34598; p_a = 1113.24691;
+p_e = 2.574314893; p_a = 2.638100358;
+
+aEp = abs(p_e-p_a)
+rEp = abs((p_e-p_a)/p_e)
+
+Bai tap 3:
+p_e = pi; p_e = log(2); p_e = sqrt(2); p_e = sin(1); 
+
+p_1 = round(p_e, 3)
+aEp1 = abs(p_e-p_1)
+rEp1 = abs((p_e-p_1)/p_e)
+p_2 = floor(p_e*10^3)/10^3
+aEp2 = abs(p_e-p_2)
+rEp2 = abs((p_e-p_2)/p_e)
+
+Bai tap 4:
+p_e = pi; n = 2;
+p_e = exp(1); n = 3;
+p_e = log(2); n = 4;
+p_e = sqrt(2); n = 5;
+p_e = sin(1); n = 6;
+
+p_1 = round(p_e, n)
+aEp1 = abs(p_e-p_1)
+rEp1 = abs((p_e-p_1)/p_e)
+p_2 = floor(p_e*10^n)/10^n
+aEp2 = abs(p_e-p_2)
+rEp2 = abs((p_e-p_2)/p_e)
+
+Bai tap 5:   
+p_t = 15.932; aEp = 1.247; p_e = 17.351;
+p_t = 11115; aEp = 120; p_e = 11205;
+p_t = 36.215; aEp = 1.327; p_e = 38.735;
+p_t = 297; aEp = 15; p_e = 319;
+
+p_L = p_t - aEp
+p_R = p_t + aEp
+if (p_e >= p_L) && (p_e <= p_R)
+    disp('Dung');
+end;
+
+Bai tap 6:
+p_t = 200; rEp = 0.05; p_e = 218;
+p_t = 5.897; rEp = 0.02; p_e = 6.035;
+p_t = 2300; rEp = 0.1; p_e = 2545;
+p_t = 35.89; rEp = 0.03; p_e = 37.54;
+
+aEp = p_t * rEp
+p_L = p_t - aEp
+p_R = p_t + aEp
+if (p_e >= p_L) && (p_e <= p_R)
+    disp('Dung');
+end;
+
+Bai tap 7:
+syms x1 x2 x3
+
+x1_a = 5; aEx1 = 0.03; 
+x2_a = 3; aEx2 = 0.06;
+x3_a = 7; aEx3 = 0.04;
+y = x1 + x2*x3;
+
+x1_a = 2; aEx1 = 0.05; 
+x2_a = 4; aEx2 = 0.02;
+x3_a = 6; aEx3 = 0.03;
+y = x1^2 + x2*x3^3;
+
+x1_a = 3; aEx1 = 0.05; 
+x2_a = 7; aEx2 = 0.07;
+x3_a = 3; aEx3 = 0.02;
+y = x3*sqrt(x1+x2);
+
+x1_a = 3; aEx1 = 0.08; 
+x2_a = 7; aEx2 = 0.03;
+x3_a = 10; aEx3 = 0.1;
+y = x1*x2/x3;
+
+x1_a = 8; aEx1 = 0.09; 
+x2_a = 4; aEx2 = 0.02;
+x3_a = 3; aEx3 = 0.04;
+y = x1*(x2+x3) - x2*x3;
+
+x1_a = 7; aEx1 = 0.05; 
+x2_a = 5; aEx2 = 0.02;
+x3_a = 2; aEx3 = 0.03;
+y = log(x1*x2-x3);
+
+x1_a = 3; aEx1 = 0.06; 
+x2_a = 0; aEx2 = 0.02;
+x3_a = 1; aEx3 = 0.04;
+y = x1*sin(x2)-cos(x3);
+
+y_a = subs(y, [x1, x2, x3], [x1_a, x2_a, x3_a]);
+dy1 = diff(y, x1); dy1_a = subs(dy1, [x1, x2, x3], [x1_a, x2_a, x3_a]);
+dy2 = diff(y, x2); dy2_a = subs(dy2, [x1, x2, x3], [x1_a, x2_a, x3_a]);
+dy3 = diff(y, x3); dy3_a = subs(dy3, [x1, x2, x3], [x1_a, x2_a, x3_a]);
+aEy = abs(dy1_a)*aEx1 + abs(dy2_a)*aEx2 + abs(dy3_a)*aEx2
+rEy = aEy/abs(y_a)
+
+
+

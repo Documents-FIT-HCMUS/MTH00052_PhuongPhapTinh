@@ -1,0 +1,141 @@
+1) 
+clc
+syms x
+f = x^2-sin(x)-50;
+df = diff(f,x);
+x0 = 2; k = 0; delta = 10^-3;
+while k < 6
+    xk = x0 - subs(f,x,x0)/subs(df,x,x0);
+    xk = double(xk);
+    rExn = abs((xk-x0)/x0);
+    fxk = subs(f,x,xk);
+    if abs(fxk)<delta
+        disp(xk)
+        break
+    end
+    x0 = xk;
+    k = k+1;
+end
+ 
+2)
+clc
+syms x
+f = x^3-6*x^2+2*x+25;
+df = diff(f,x);
+x0 = 4; k = 1; delta = 10^-3;
+while true
+    xk = x0 - subs(f,x,x0)/subs(df,x,x0);
+    xk = double(xk);
+    rExn = abs((xk-x0)/x0);
+    fxk = subs(f,x,xk);
+    if abs(fxk)<delta
+        disp(xk)
+        break
+    end
+    x0 = xk;
+    k = k+1;
+end 
+
+3)
+clc
+syms x
+f = x^2-sin(x)-50;
+a = 0; b = 8; k = 1; delta = 3*10^-3;
+while true
+    fa = subs(f,x,a); fb = subs(f,x,b);
+    c = a - (b-a)*fa/(fb-fa);
+    rEc = abs((c-a)/a);
+    fc = subs(f,x,c);
+    if abs(fc)<delta
+        disp(round(c,4))
+        break
+    end
+    if sign(fa*fc) > 0
+        a=c;
+    else
+        b=c;
+    end
+    k = k+1;
+end 
+round(subs(f,x,c),5)
+
+Bonus Bài 1 (tạo bảng):
+function [xn,k] = GPT_TT(f,x0,delta)
+syms x;
+df = diff(f,x);
+k=1;
+h = {'k','x0','xn','fx','abs(fx)<=delta'};
+data = zeros(k,length(h));
+xn=x0-subs(f,x,x0)/subs(df,x,x0);
+xn=double(xn);
+fx = subs(f,x,xn);
+data(k,:) = [k x0 xn fx abs(fx)<=delta];
+while (abs(fx)>=delta)
+    x0=xn;
+    xn=x0-subs(f,x,x0)/subs(df,x,x0);
+    xn=double(xn);
+    fx = subs(f,x,xn);
+    k=k+1;
+    data(k,:) = [k x0 xn fx abs(fx)<=delta];
+end
+dt = figure;
+t=uitable(dt,'data',data,'columnname',h,'Position',[0 0 600 400]);
+disp(t);
+end
+
+clear all
+clc
+syms x
+f = x^2 - sin(x) - 50;
+x0 = 2; delta = 10^(-3);
+[xn,k] = GPT_TT(f,x0,delta)
+
+Bonus bài 3 (tạo bảng):
+function [c,k] = GPT_DC(f,a,b,delta)
+syms x;
+c = a-subs(f,x,a)*(b-a)/(subs(f,x,b)-subs(f,x,a));
+fc = subs(f,x,c);
+k = 1;
+h = {'k','a','b','c','fc','abs(fc)<=delta'};
+data = zeros(k,length(h));
+data(k,:) = [k a b c fc abs(fc)<=delta];
+while (abs(fc)>delta)
+    dau = subs(f,x,a)*subs(f,x,c);
+    if (dau>0)
+        a=c;
+    else
+        b=c;
+    end
+    c = a-subs(f,x,a)*(b-a)/(subs(f,x,b)-subs(f,x,a));
+    c = double(c);
+    fc = subs(f,x,c);
+    k=k+1;
+    data(k,:) = [k a b c fc abs(fc)<=delta];
+end
+dt=figure;
+t=uitable(dt,'data',data,'columnname',h,'Position',[0 0 600 400]);
+disp(t);
+end
+
+clear all
+clc
+format longG
+syms x
+f = x^2 - sin(x) - 50;
+a = 0; b = 8; delta = 3*10^(-3);
+[c,k] = GPT_DC(f,a,b,delta);
+
+5)
+clear all
+clc
+format longG
+syms x
+f = x + log(x+2) - 10;
+x0 = 7; delta = 10^-3;
+[x,k] = GPT_TT(f,x0,delta)
+x0 = 9; delta = 2*10^-3;
+[x,k] = GPT_TT(f,x0,delta)
+x0 = 5; delta = 5*10^-3;
+[x,k] = GPT_TT(f,x0,delta)
+x0 = 3; delta = 5*10^-3;
+[x,k] = GPT_TT(f,x0,delta)

@@ -1,0 +1,195 @@
+1)
+clc;
+syms x
+xx =[ 1 2.2 3.2 4]; yy =[ 1.678 3.267 2.198 3.787]; xc = 2.5;
+X= [1 xx(1) xx(1)^2 xx(1)^3;1 xx(2) xx(2)^2 xx(2)^3;1 xx(3) xx(3)^2 xx(3)^3;1 xx(4) xx(4)^2 xx(4)^3];
+Y= [yy(1); yy(2); yy(3); yy(4)]; A = inv(X)*Y;
+syms x;
+P=A(1)+A(2)*x+A(3)*x^2+A(4)*x^3;
+yc = double(subs(P,x,xc))
+fplot(P,[xx(1) xx(end)]);
+hold on
+plot(xx,yy,'bo')
+
+Bonus:
+function [yc] = XapXiDaThucTongQuat(xx,yy,xc)
+n = length(xx); X = zeros(n,n);
+for i=1:n
+    for j=1:n
+        X(i,j)=xx(i)^(j-1);
+    end
+end
+
+Y = yy'; A=inv(X)*Y;
+syms x;
+P=0;
+for i=1:n
+    P=P+A(i)*x^(i-1);
+end
+yc = subs(P,x,xc); yc = double(yc);
+end
+
+2)
+clc;
+syms x
+xx =[2 4.5 5.7 7.2 9.3];
+yy =[3.218 1.642 2.398 2.145 3.135];
+xc1 = 5; xc2 = 10;
+XapXiDaThucTongQuat(xx,yy,xc1)
+XapXiDaThucTongQuat(xx,yy,xc2)
+
+3)
+clc;
+syms x
+xx =[-3.2 -2.5 -1.7 -0.8 0.3 1.5];
+yy =[-8.982 -5.831 -4.261 -1.837 -3.298 -0.249];
+xc1 = -2; xc2 = 0;
+XapXiDaThucTongQuat(xx,yy,xc1)
+XapXiDaThucTongQuat(xx,yy,xc2)
+
+4)
+Main:
+clc;
+syms x
+xx =[ 1 2.2 3.2 4]; yy =[ 1.678 3.267 2.198 3.787]; xc = 2.5;
+XapXiDaThucLagrange(xx,yy,xc,1)
+
+Function:
+function [yc] = XapXiDaThucLagrange(xx,yy,xc,isPlot)
+syms x;
+n=length(xx); L=0;
+for i=1:n
+    Tu = 1;
+    Mau = 1;
+    for j=1:n
+        if i~=j
+            Tu = Tu*(x-xx(j));
+            Mau = Mau*(xx(i)-xx(j));
+            
+        end
+    end
+    L = L + (Tu/Mau)*yy(i);
+end
+
+yc = subs(L,x,xc);
+yc = double(yc);
+if isPlot==1
+    fplot(L,[xx(1) xx(end)]);
+    hold on ;
+    plot(xx,yy,'bo');
+end
+end
+
+5)
+clc;
+syms x
+xx =[2 4.5 5.7 7.2 9.3];
+yy =[3.218 1.642 2.398 2.145 3.135];
+xc1 = 5; xc2 = 10;
+XapXiDaThucLagrange(xx,yy,xc1,1)
+XapXiDaThucLagrange(xx,yy,xc2,1)
+
+6)
+clc;
+syms x
+xx =[-3.2 -2.5 -1.7 -0.8 0.3 1.5];
+yy =[-8.982 -5.831 -4.261 -1.837 -3.298 -0.249];
+xc1 = -2; xc2 = 0;
+yc1 = XapXiDaThucLagrange(xx,yy,xc1,0)
+yc2 = XapXiDaThucLagrange(xx,yy,xc2,0)
+
+7)
+8)
+clc;
+syms x
+xx =[2 4.5 5.7 7.2 9.3];
+yy =[3.218 1.642 2.398 2.145 3.135];
+xc1 = 5; xc2 = 10;
+
+n1=yy;
+n2(1)=(n1(2)-n1(1))/(xx(2)-xx(1));
+n2(2)=(n1(3)-n1(2))/(xx(3)-xx(2));
+n2(3)=(n1(4)-n1(3))/(xx(4)-xx(3));
+n2(4)=(n1(5)-n1(4))/(xx(5)-xx(4));
+
+n3(1)=(n2(2)-n2(1))/(xx(3)-xx(1));
+n3(2)=(n2(3)-n2(2))/(xx(4)-xx(2));
+n3(3)=(n2(4)-n2(3))/(xx(5)-xx(3));
+
+n4(1)=(n3(2)-n3(1))/(xx(4)-xx(1));
+n4(2)=(n3(3)-n3(2))/(xx(5)-xx(2));
+
+n5(1)=(n4(2)-n4(1))/(xx(5)-xx(1));
+
+N = n1(1) + n2(1)*(x-xx(1)) + n3(1)*(x-xx(1))*(x-xx(2)) + n4(1)*(x-xx(1))*(x-xx(2))*(x-xx(3)) + n5(1)*(x-xx(1))*(x-xx(2))*(x-xx(3))*(x-xx(4));
+yc1 = subs(N,x,xc1); yc2 = subs(N,x,xc2);
+yc1 = double(yc1), yc2 = double(yc2)
+
+9)
+clc;
+syms x
+xx =[-3.2 -2.5 -1.7 -0.8 0.3 1.5];
+yy =[-8.982 -5.831 -4.261 -1.837 -3.298 -0.249];
+xc1 = -2; xc2 = 0;
+n1=yy;
+n2(1)=(n1(2)-n1(1))/(xx(2)-xx(1));
+n2(2)=(n1(3)-n1(2))/(xx(3)-xx(2));
+n2(3)=(n1(4)-n1(3))/(xx(4)-xx(3));
+n2(4)=(n1(5)-n1(4))/(xx(5)-xx(4));
+n2(5)=(n1(6)-n1(5))/(xx(6)-xx(5));
+
+n3(1)=(n2(2)-n2(1))/(xx(3)-xx(1));
+n3(2)=(n2(3)-n2(2))/(xx(4)-xx(2));
+n3(3)=(n2(4)-n2(3))/(xx(5)-xx(3));
+n3(4)=(n2(5)-n2(4))/(xx(6)-xx(4));
+
+n4(1)=(n3(2)-n3(1))/(xx(4)-xx(1));
+n4(2)=(n3(3)-n3(2))/(xx(5)-xx(2));
+n4(3)=(n3(4)-n3(3))/(xx(6)-xx(3));
+
+n5(1)=(n4(2)-n4(1))/(xx(5)-xx(1));
+n5(2)=(n4(3)-n4(2))/(xx(6)-xx(2));
+
+n6(1)=(n5(2)-n5(1))/(xx(6)-xx(1));
+
+N1 = n1(1) + n2(1)*(x-xx(1)) + n3(1)*(x-xx(1))*(x-xx(2)) + n4(1)*(x-xx(1))*(x-xx(2))*(x-xx(3));
+N2 = n5(1)*(x-xx(1))*(x-xx(2))*(x-xx(3))*(x-xx(4)) + n6(1)*(x-xx(1))*(x-xx(2))*(x-xx(3))*(x-xx(4))*(x-xx(5));
+N = N1 + N2;
+yc1 = subs(N,x,xc1); yc2 = subs(N,x,xc2);
+yc1 = double(yc1), yc2 = double(yc2)
+
+NEWTON FUNCTION
+Uyên Phan
+function[] = xapxidathucNewton(xx, yy, xc)
+    syms x
+    n = length(xx);
+    n1 = yy;
+    tsp = zeros(1, n);
+    N = n1(1);
+    for i = 2:n
+       for j = 1:(n-i+1)
+          tsp(j)=(n1(j+1)-n1(j))/(xx(j+i-1)-xx(j));
+       end
+       tich = 1;
+       for k = 1:(i-1)
+          tich = tich*(x-xx(k));
+       end
+       N = N + tsp(1)*tich;
+       n1 = tsp;
+    end
+    yc = subs(N, x, xc);
+    ezplot(N, [xx(1) xx(end)]);
+    hold on;
+    plot(xx, yy, 'ro');
+    title = {'xx', 'yy'};
+    data = zeros(n+length(xc), length(title));
+    for i = 1:n
+       data(i,:)= [xx(i) yy(i)]; 
+    end
+    for j = n+1:n+length(xc)
+       data(j,:)=[xc(j-n) yc(j-n)]; 
+    end
+    dt = figure();
+    t = uitable(dt, 'data', data, 'Columnname', title, 'Position', [0 0 400 400]);
+    disp(t);
+end

@@ -1,0 +1,36 @@
+# MSSV 19120383
+# BAI 14
+a=2; b=3; c=1;
+A = (b^2 - 4*a*c)/(2*a)
+B = [a*sin(b)*cos(c), a*sin(b)*sin(c), a*cos(b)]
+C = [(a+b)/(a+b+c), (a-b+c)/(a+b+c), (c^2-a*b)/(a+b+c), 1/(a+b+c)]
+
+# BAI 15
+f = @(x) x.*sin(x)
+f(1)
+f(3)
+x = -2:0.1:4;
+plot(x, f(x))
+
+syms x
+f = x*sin(x)
+subs(f, x, 1)
+subs(f, x, 3)
+ezplot(f, [-2,4])
+
+# BAI 17b
+syms x
+g = (x^2+1)/(x+1)
+g2 = diff(diff(g, x), x)
+subs(g2, x, 1)
+G = int(g, x)
+I = int(g, x, -1, 1)
+
+# BAI 18
+function[x1, x2] =giaiPTB2(a, b, c)
+if (a == 0)
+    disp('A phai khac 0, xin moi nhap lai!');
+    end;
+delta = b^2 - 4*a*c
+x1 = (-b + sqrt(delta))/(2*a);
+x2 = (-b - sqrt(delta))/(2*a);
